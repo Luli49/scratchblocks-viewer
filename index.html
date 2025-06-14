@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Scratchblocks Image Link Generator</title>
+  <title>Scratchblocks Auto Image</title>
   <script src="https://scratchblocks.github.io/js/scratchblocks-v3.4-min.js"></script>
   <style>
     body {
@@ -16,49 +16,57 @@
     #output {
       margin-top: 20px;
     }
+    img {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <h1>Générateur d'image Scratchblocks</h1>
+  <h1>Image directe du script Scratchblocks</h1>
   <textarea id="code" rows="10" cols="50">
 when green flag clicked
 say [Hello!]
   </textarea><br><br>
-  <button onclick="generate()">Générer l'image</button>
 
   <div id="output"></div>
 
   <script>
-    function generate() {
+    function updateImage() {
       const code = document.getElementById("code").value;
       const outputDiv = document.getElementById("output");
       outputDiv.innerHTML = '';
 
-      // Créer un conteneur temporaire pour le rendu
       const container = document.createElement('div');
       outputDiv.appendChild(container);
 
-      // Générer les blocs
       scratchblocks.renderMatching(container, code, { style: "scratch3" });
 
-      // Attendre un peu que le rendu soit bien fait
       setTimeout(() => {
         const svg = container.querySelector('svg');
         if (svg) {
           const svgString = new XMLSerializer().serializeToString(svg);
           const dataURL = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
 
-          const link = document.createElement('a');
-          link.href = dataURL;
-          link.target = '_blank';
-          link.textContent = 'Voir l\'image du script (SVG)';
+          // Affiche l'image directement
+          const img = document.createElement('img');
+          img.src = dataURL;
+          img.alt = "Script Scratchblocks";
+          img.width = 400;
+
           outputDiv.appendChild(document.createElement('br'));
-          outputDiv.appendChild(link);
+          outputDiv.appendChild(img);
         } else {
           outputDiv.innerHTML += '<p>Erreur : aucun SVG trouvé.</p>';
         }
       }, 300);
     }
+
+    // Met à jour automatiquement quand la page charge
+    window.onload = updateImage;
+
+    // Met à jour quand on tape dans le textarea
+    document.getElementById("code").addEventListener("input", updateImage);
   </script>
 </body>
 </html>
