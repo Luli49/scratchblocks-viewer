@@ -1,43 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Scratchblocks Image Link Generator</title>
   <script src="https://scratchblocks.github.io/js/scratchblocks-v3.4-min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    textarea {
+      width: 100%;
+      max-width: 600px;
+    }
+    #output {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Scratchblocks Image Link Generator</h1>
+  <h1>Générateur de lien d'image Scratchblocks</h1>
   <textarea id="code" rows="10" cols="50">
 when green flag clicked
 say [Hello!]
-  </textarea><br>
+  </textarea><br><br>
   <button onclick="generate()">Générer l'image</button>
+
   <div id="output"></div>
 
   <script>
     function generate() {
-      var code = document.getElementById("code").value;
-      var outputDiv = document.getElementById("output");
+      const code = document.getElementById("code").value;
+      const outputDiv = document.getElementById("output");
       outputDiv.innerHTML = '';
 
-      // Générer le bloc
-      var blocks = scratchblocks.render(code, { style: "scratch3" });
+      // Crée le bloc
+      const blocks = scratchblocks.render(code, { style: "scratch3" });
       outputDiv.appendChild(blocks);
 
-      // Convertir en image (canvas)
-      html2canvas(blocks).then(function(canvas) {
-        var dataURL = canvas.toDataURL("image/png");
-        var link = document.createElement("a");
-        link.href = dataURL;
-        link.target = "_blank";
-        link.textContent = "Voir l'image du script";
-        outputDiv.appendChild(document.createElement("br"));
-        outputDiv.appendChild(link);
-      });
+      // Attends que le SVG soit bien généré
+      setTimeout(() => {
+        const svgElement = outputDiv.querySelector("svg");
+        if (svgElement) {
+          // Sérialise le SVG en texte
+          const svgData = new XMLSerializer().serializeToString(svgElement);
+          const dataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
+
+          // Crée un lien vers l'image
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.target = "_blank";
+          link.textContent = "Voir l'image du script (SVG)";
+
+          outputDiv.appendChild(document.createElement("br"));
+          outputDiv.appendChild(link);
+        } else {
+          outputDiv.innerHTML = "<p>Erreur : impossible de générer l'image.</p>";
+        }
+      }, 100);
     }
   </script>
-
-  <!-- html2canvas pour convertir en image -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
