@@ -34,19 +34,18 @@ say [Hello!]
       const outputDiv = document.getElementById("output");
       outputDiv.innerHTML = '';
 
-      // Crée le bloc
+      // Générer les blocs
       const blocks = scratchblocks.render(code, { style: "scratch3" });
       outputDiv.appendChild(blocks);
 
-      // Attends que le SVG soit bien généré
+      // Attendre un peu que le rendu se fasse
       setTimeout(() => {
+        // Chercher le SVG dans le div généré
         const svgElement = outputDiv.querySelector("svg");
         if (svgElement) {
-          // Sérialise le SVG en texte
           const svgData = new XMLSerializer().serializeToString(svgElement);
           const dataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
 
-          // Crée un lien vers l'image
           const link = document.createElement("a");
           link.href = dataUrl;
           link.target = "_blank";
@@ -55,9 +54,9 @@ say [Hello!]
           outputDiv.appendChild(document.createElement("br"));
           outputDiv.appendChild(link);
         } else {
-          outputDiv.innerHTML = "<p>Erreur : impossible de générer l'image.</p>";
+          outputDiv.innerHTML += "<p>Erreur : impossible de trouver le SVG généré.</p>";
         }
-      }, 100);
+      }, 200); // un petit délai pour laisser le rendu finir
     }
   </script>
 </body>
