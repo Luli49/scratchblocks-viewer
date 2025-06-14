@@ -19,7 +19,7 @@
   </style>
 </head>
 <body>
-  <h1>Générateur de lien d'image Scratchblocks</h1>
+  <h1>Générateur d'image Scratchblocks</h1>
   <textarea id="code" rows="10" cols="50">
 when green flag clicked
 say [Hello!]
@@ -34,29 +34,30 @@ say [Hello!]
       const outputDiv = document.getElementById("output");
       outputDiv.innerHTML = '';
 
+      // Créer un conteneur temporaire pour le rendu
+      const container = document.createElement('div');
+      outputDiv.appendChild(container);
+
       // Générer les blocs
-      const blocks = scratchblocks.render(code, { style: "scratch3" });
-      outputDiv.appendChild(blocks);
+      scratchblocks.renderMatching(container, code, { style: "scratch3" });
 
-      // Attendre un peu que le rendu se fasse
+      // Attendre un peu que le rendu soit bien fait
       setTimeout(() => {
-        // Chercher le SVG dans le div généré
-        const svgElement = outputDiv.querySelector("svg");
-        if (svgElement) {
-          const svgData = new XMLSerializer().serializeToString(svgElement);
-          const dataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgData);
+        const svg = container.querySelector('svg');
+        if (svg) {
+          const svgString = new XMLSerializer().serializeToString(svg);
+          const dataURL = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
 
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.target = "_blank";
-          link.textContent = "Voir l'image du script (SVG)";
-
-          outputDiv.appendChild(document.createElement("br"));
+          const link = document.createElement('a');
+          link.href = dataURL;
+          link.target = '_blank';
+          link.textContent = 'Voir l\'image du script (SVG)';
+          outputDiv.appendChild(document.createElement('br'));
           outputDiv.appendChild(link);
         } else {
-          outputDiv.innerHTML += "<p>Erreur : impossible de trouver le SVG généré.</p>";
+          outputDiv.innerHTML += '<p>Erreur : aucun SVG trouvé.</p>';
         }
-      }, 200); // un petit délai pour laisser le rendu finir
+      }, 300);
     }
   </script>
 </body>
