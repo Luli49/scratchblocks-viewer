@@ -1,0 +1,15 @@
+body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    textarea {
+      width: 100%;
+      max-width: 600px;
+    }
+    #output {
+      margin-top: 20px;
+    }
+    img {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
