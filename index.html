@@ -3,24 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Scratchblocks Auto Image</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://scratchblocks.github.io/js/scratchblocks-v3.4-min.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-    }
-    textarea {
-      width: 100%;
-      max-width: 600px;
-    }
-    #output {
-      margin-top: 20px;
-    }
-    img {
-      border: 1px solid #ccc;
-      margin-top: 10px;
-    }
-  </style>
 </head>
 <body>
   <h1>Image directe du script Scratchblocks</h1>
@@ -28,40 +12,7 @@
 when green flag clicked
 say [Hello!]
   </textarea><br><br>
-
   <div id="output"></div>
-
-  <script>
-    function updateImage() {
-      const code = document.getElementById("code").value;
-      const outputDiv = document.getElementById("output");
-      outputDiv.innerHTML = '';
-
-      // Générer le bloc dans un élément temporaire
-      const tempDiv = document.createElement('div');
-      outputDiv.appendChild(tempDiv);
-      scratchblocks.render(tempDiv, { style: 'scratch3' });
-      tempDiv.innerText = code;
-
-      // Laisser le temps au rendu
-      setTimeout(() => {
-        const svg = tempDiv.querySelector('svg');
-        if (svg) {
-          const svgString = new XMLSerializer().serializeToString(svg);
-          const dataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
-          const img = document.createElement('img');
-          img.src = dataUrl;
-          img.alt = "Script Scratchblocks";
-          img.width = 400;
-          outputDiv.appendChild(img);
-        } else {
-          outputDiv.innerHTML += '<p>Erreur : aucun SVG généré.</p>';
-        }
-      }, 200);
-    }
-
-    window.onload = updateImage;
-    document.getElementById("code").addEventListener("input", updateImage);
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
